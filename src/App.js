@@ -17,6 +17,7 @@ function App() {
   const [drawerProduct, setDrawerProduct] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [pinnedIds, setPinnedIds] = useState([]);
+  const [catalogFilter, setCatalogFilter] = useState('all');
 
   // Force scroll to top on refresh
   React.useEffect(() => {
@@ -48,8 +49,9 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const switchTab = (tab) => {
+  const switchTab = (tab, category = 'all') => {
     setActiveTab(tab);
+    setCatalogFilter(category);
     scrollToTop();
   };
 
@@ -58,7 +60,7 @@ function App() {
       {isLoading && <LoadingOverlay onFinish={() => setIsLoading(false)} />}
       <Navbar
         activeTab={activeTab}
-        setActiveTab={switchTab}
+        setActiveTab={(tab) => switchTab(tab, 'all')}
         pinnedCount={pinnedIds.length}
       />
 
@@ -139,7 +141,7 @@ function App() {
                 <p className="lifestyle-banner-desc">
                   Premium teak sun loungers, braided dining sets, and stone accent tables. Weather-resistant. Forever elegant.
                 </p>
-                <button className="btn-luxury" onClick={() => switchTab('catalog')}>
+                <button className="btn-luxury" onClick={() => switchTab('catalog', 'outdoor')}>
                   Explore Outdoor
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </button>
@@ -155,16 +157,16 @@ function App() {
             </div>
             <div className="room-spaces-grid">
               {[
-                { label: 'Living Room', img: 'https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=800&q=80', span: true },
-                { label: 'Bedroom', img: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80', span: false },
-                { label: 'Outdoor', img: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80', span: false },
-                { label: 'Dining', img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80', span: false },
-                { label: 'Home Office', img: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80', span: false }
+                { label: 'Living Room', key: 'living', img: 'https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=800&q=80', span: true },
+                { label: 'Bedroom', key: 'bedroom', img: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80', span: false },
+                { label: 'Outdoor', key: 'outdoor', img: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80', span: false },
+                { label: 'Dining', key: 'dining', img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80', span: false },
+                { label: 'Home Office', key: 'office', img: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80', span: false }
               ].map((room, i) => (
                 <div
                   key={i}
                   className={`room-spaces-item ${room.span ? 'span-2' : ''}`}
-                  onClick={() => switchTab('catalog')}
+                  onClick={() => switchTab('catalog', room.key)}
                 >
                   <img
                     src={room.img}
@@ -219,6 +221,8 @@ function App() {
             onOpenDetail={handleOpenDetail}
             pinnedIds={pinnedIds}
             onTogglePin={handleTogglePin}
+            activeFilter={catalogFilter}
+            setActiveFilter={setCatalogFilter}
           />
         </div>
       )}

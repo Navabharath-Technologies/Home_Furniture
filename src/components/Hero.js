@@ -8,7 +8,8 @@ const heroSlides = [
     title: "Where Comfort Meets Artisanship",
     description: "Discover handcrafted indoor masterpieces designed to fill your spaces with organic beauty and timeless character.",
     cta: "Explore Living Room",
-    ctaTab: "catalog"
+    ctaTab: "catalog",
+    ctaCategory: "living"
   },
   {
     id: 2,
@@ -17,7 +18,8 @@ const heroSlides = [
     title: "The Art of Living Outside",
     description: "Premium Grade-A teak, lava stone, and braided performance textiles built to celebrate every season.",
     cta: "See Outdoor Collection",
-    ctaTab: "catalog"
+    ctaTab: "catalog",
+    ctaCategory: "outdoor"
   },
   {
     id: 3,
@@ -26,7 +28,8 @@ const heroSlides = [
     title: "Rest in Refined Luxury",
     description: "Every headboard, nightstand, and dresser is a quiet statement — made for the spaces you hold closest.",
     cta: "View Bedroom Pieces",
-    ctaTab: "catalog"
+    ctaTab: "catalog",
+    ctaCategory: "bedroom"
   },
   {
     id: 4,
@@ -35,7 +38,8 @@ const heroSlides = [
     title: "Tables Built for Gathering",
     description: "From sculptural solid-oak tables to hand-woven linen chairs. Design that brings people together.",
     cta: "Browse Dining",
-    ctaTab: "catalog"
+    ctaTab: "catalog",
+    ctaCategory: "dining"
   }
 ];
 
@@ -61,7 +65,7 @@ export default function Hero({ setActiveTab }) {
             <p className="hero-description">{slide.description}</p>
             <button
               className="btn-luxury hero-cta"
-              onClick={() => setActiveTab(slide.ctaTab)}
+              onClick={() => setActiveTab(slide.ctaTab, slide.ctaCategory)}
             >
               {slide.cta}
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

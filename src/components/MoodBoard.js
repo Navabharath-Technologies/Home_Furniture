@@ -4,6 +4,7 @@ import { products } from '../data/products';
 export default function MoodBoard({ pinnedIds, onTogglePin }) {
   const [canvasItems, setCanvasItems] = useState([]);
   const [draggingId, setDraggingId] = useState(null);
+  const [deletingProduct, setDeletingProduct] = useState(null);
   const dragOffset = useRef({ x: 0, y: 0 });
   const canvasRef = useRef(null);
 
@@ -24,6 +25,19 @@ export default function MoodBoard({ pinnedIds, onTogglePin }) {
 
   const removeFromCanvas = (productId) => {
     setCanvasItems(prev => prev.filter(ci => ci.productId !== productId));
+  };
+
+  const handleDeleteClick = (e, product) => {
+    e.stopPropagation();
+    setDeletingProduct(product);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deletingProduct) {
+      removeFromCanvas(deletingProduct.id);
+      onTogglePin(deletingProduct.id);
+      setDeletingProduct(null);
+    }
   };
 
   const handleMouseDown = useCallback((e, productId) => {
@@ -95,13 +109,22 @@ export default function MoodBoard({ pinnedIds, onTogglePin }) {
                   <span className="moodboard-sidebar-item-name">{product.name}</span>
                   <span className="moodboard-sidebar-item-cat">{product.category}</span>
                 </div>
-                <button
-                  className="moodboard-sidebar-item-add"
-                  onClick={() => addToCanvas(product)}
-                  title="Place on canvas"
-                >
-                  {canvasItemIds.includes(product.id) ? '✓' : '+'}
-                </button>
+                <div className="moodboard-sidebar-item-actions">
+                  <button
+                    className="moodboard-sidebar-item-add"
+                    onClick={(e) => { e.stopPropagation(); addToCanvas(product); }}
+                    title="Place on canvas"
+                  >
+                    {canvasItemIds.includes(product.id) ? '✓' : '+'}
+                  </button>
+                  <button
+                    className="moodboard-sidebar-item-delete"
+                    onClick={(e) => handleDeleteClick(e, product)}
+                    title="Remove from pinned"
+                  >
+                    ✕
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -169,6 +192,30 @@ export default function MoodBoard({ pinnedIds, onTogglePin }) {
           )}
         </div>
       </div>
+
+      {deletingProduct && (
+        <div className="moodboard-modal-overlay">
+          <div className="moodboard-modal">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent-clay)" strokeWidth="1.5" style={{ marginBottom: '16px' }}>
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <h3 className="moodboard-modal-title">Remove Pin</h3>
+            <p className="moodboard-modal-text">
+              Are you sure you want to remove <strong>{deletingProduct.name}</strong> from your pinned pieces? This will also remove it from the canvas.
+            </p>
+            <div className="moodboard-modal-actions">
+              <button className="moodboard-modal-btn cancel" onClick={() => setDeletingProduct(null)}>
+                Cancel
+              </button>
+              <button className="moodboard-modal-btn confirm" onClick={handleConfirmDelete}>
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

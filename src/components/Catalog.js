@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { products } from '../data/products';
 
 const categories = [
@@ -10,9 +10,7 @@ const categories = [
   { key: 'office', label: 'Home Office' }
 ];
 
-export default function Catalog({ onOpenDetail, pinnedIds, onTogglePin }) {
-  const [activeFilter, setActiveFilter] = useState('all');
-
+export default function Catalog({ onOpenDetail, pinnedIds, onTogglePin, activeFilter, setActiveFilter }) {
   const filtered = activeFilter === 'all'
     ? products
     : products.filter(p => p.category === activeFilter);

@@ -23,9 +23,15 @@ export default function Footer({ setActiveTab }) {
         <div>
           <p className="footer-title">By Room</p>
           <ul className="footer-links-list">
-            {['Living Room', 'Dining Room', 'Bedroom', 'Outdoor Terrace', 'Home Office'].map(room => (
-              <li key={room}>
-                <button className="footer-link-link" onClick={() => setActiveTab('catalog')}>{room}</button>
+            {[
+              { label: 'Living Room', key: 'living' },
+              { label: 'Dining Room', key: 'dining' },
+              { label: 'Bedroom', key: 'bedroom' },
+              { label: 'Outdoor Terrace', key: 'outdoor' },
+              { label: 'Home Office', key: 'office' }
+            ].map(room => (
+              <li key={room.label}>
+                <button className="footer-link-link" onClick={() => setActiveTab('catalog', room.key)}>{room.label}</button>
               </li>
             ))}
           </ul>
