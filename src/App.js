@@ -18,6 +18,7 @@ function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [pinnedIds, setPinnedIds] = useState([]);
   const [catalogFilter, setCatalogFilter] = useState('all');
+  const [catalogSearch, setCatalogSearch] = useState('');
 
   // Force scroll to top on refresh
   React.useEffect(() => {
@@ -49,9 +50,10 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const switchTab = (tab, category = 'all') => {
+  const switchTab = (tab, category = 'all', search = '') => {
     setActiveTab(tab);
     setCatalogFilter(category);
+    setCatalogSearch(search);
     scrollToTop();
   };
 
@@ -60,7 +62,7 @@ function App() {
       {isLoading && <LoadingOverlay onFinish={() => setIsLoading(false)} />}
       <Navbar
         activeTab={activeTab}
-        setActiveTab={(tab) => switchTab(tab, 'all')}
+        setActiveTab={switchTab}
         pinnedCount={pinnedIds.length}
       />
 
@@ -223,6 +225,8 @@ function App() {
             onTogglePin={handleTogglePin}
             activeFilter={catalogFilter}
             setActiveFilter={setCatalogFilter}
+            searchQuery={catalogSearch}
+            setSearchQuery={setCatalogSearch}
           />
         </div>
       )}

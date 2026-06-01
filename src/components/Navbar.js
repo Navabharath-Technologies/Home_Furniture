@@ -19,12 +19,38 @@ export default function Navbar({ activeTab, setActiveTab, pinnedCount }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      setActiveTab('catalog');
+  const submitSearch = (query) => {
+    if (query.trim()) {
+      const q = query.trim().toLowerCase();
+      let matchedCategory = 'all';
+      let searchVal = query.trim();
+
+      // Map to correct category if it matches category keywords
+      if (q.includes('dining') || q.includes('dinning') || q.includes('dine')) {
+        matchedCategory = 'dining';
+        searchVal = '';
+      } else if (q.includes('outdoor') || q.includes('outside') || q.includes('terrace') || q.includes('garden')) {
+        matchedCategory = 'outdoor';
+        searchVal = '';
+      } else if (q.includes('living') || q.includes('sofa') || q.includes('salon') || q.includes('lounge')) {
+        matchedCategory = 'living';
+        searchVal = '';
+      } else if (q.includes('bedroom') || q.includes('bed') || q.includes('sleep')) {
+        matchedCategory = 'bedroom';
+        searchVal = '';
+      } else if (q.includes('office') || q.includes('work') || q.includes('desk') || q.includes('study')) {
+        matchedCategory = 'office';
+        searchVal = '';
+      }
+
+      setActiveTab('catalog', matchedCategory, searchVal);
       setIsSearchOpen(false);
     }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    submitSearch(searchQuery);
   };
 
   return (
@@ -162,7 +188,7 @@ export default function Navbar({ activeTab, setActiveTab, pinnedCount }) {
               {['Sectional', 'Teak Lounger', 'Travertine', 'Linen Chair', 'Outdoor'].map((tag) => (
                 <button 
                   key={tag}
-                  onClick={() => { setSearchQuery(tag); }}
+                  onClick={() => { setSearchQuery(tag); submitSearch(tag); }}
                   style={{ padding: '6px 14px', borderRadius: '20px', backgroundColor: 'var(--bg-secondary)', fontSize: '11px', fontWeight: '500' }}
                 >
                   {tag}
