@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Home_Furniture/static/css/main.a23d3cbb.css",
-    "main.js": "/Home_Furniture/static/js/main.941b2cf7.js",
+    "main.css": "/Home_Furniture/static/css/main.3ec572f6.css",
+    "main.js": "/Home_Furniture/static/js/main.1fa67853.js",
     "index.html": "/Home_Furniture/index.html",
-    "main.a23d3cbb.css.map": "/Home_Furniture/static/css/main.a23d3cbb.css.map",
-    "main.941b2cf7.js.map": "/Home_Furniture/static/js/main.941b2cf7.js.map"
+    "main.3ec572f6.css.map": "/Home_Furniture/static/css/main.3ec572f6.css.map",
+    "main.1fa67853.js.map": "/Home_Furniture/static/js/main.1fa67853.js.map"
   },
   "entrypoints": [
-    "static/css/main.a23d3cbb.css",
-    "static/js/main.941b2cf7.js"
+    "static/css/main.3ec572f6.css",
+    "static/js/main.1fa67853.js"
   ]
 }
