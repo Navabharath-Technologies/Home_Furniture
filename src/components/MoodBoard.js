@@ -70,6 +70,43 @@ export default function MoodBoard({ pinnedIds, onTogglePin }) {
     setDraggingId(null);
   }, []);
 
+  const handleTouchStart = useCallback((e, productId) => {
+    if (e.touches.length > 0) {
+      if (e.cancelable) e.preventDefault();
+      const touch = e.touches[0];
+      const canvasRect = canvasRef.current.getBoundingClientRect();
+      const item = canvasItems.find(ci => ci.productId === productId);
+      if (!item) return;
+      dragOffset.current = {
+        x: touch.clientX - canvasRect.left - item.x,
+        y: touch.clientY - canvasRect.top - item.y
+      };
+      setDraggingId(productId);
+    }
+  }, [canvasItems]);
+
+  const handleTouchMove = useCallback((e) => {
+    if (!draggingId || !canvasRef.current) return;
+    if (e.touches.length > 0) {
+      if (e.cancelable) e.preventDefault();
+      const touch = e.touches[0];
+      const canvasRect = canvasRef.current.getBoundingClientRect();
+      const newX = touch.clientX - canvasRect.left - dragOffset.current.x;
+      const newY = touch.clientY - canvasRect.top - dragOffset.current.y;
+      setCanvasItems(prev =>
+        prev.map(ci =>
+          ci.productId === draggingId
+            ? { ...ci, x: Math.max(0, Math.min(newX, canvasRect.width - 160)), y: Math.max(0, Math.min(newY, canvasRect.height - 160)) }
+            : ci
+        )
+      );
+    }
+  }, [draggingId]);
+
+  const handleTouchEnd = useCallback(() => {
+    setDraggingId(null);
+  }, []);
+
   const clearCanvas = () => setCanvasItems([]);
 
   return (
@@ -137,6 +174,9 @@ export default function MoodBoard({ pinnedIds, onTogglePin }) {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
         >
           {canvasItems.length === 0 && (
             <div className="moodboard-canvas-empty">
@@ -157,6 +197,7 @@ export default function MoodBoard({ pinnedIds, onTogglePin }) {
                 className={`canvas-placed-item ${draggingId === ci.productId ? 'dragging' : ''}`}
                 style={{ left: ci.x, top: ci.y }}
                 onMouseDown={(e) => handleMouseDown(e, ci.productId)}
+                onTouchStart={(e) => handleTouchStart(e, ci.productId)}
               >
                 <img src={product.images.front} alt={product.name} className="canvas-placed-img" />
                 <div className="canvas-placed-info">
